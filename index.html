@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>No Gas Memories Archive</title>
+    <link rel="icon" href="icon.png" type="image/png">
+    <style>
+    body {
+        background-image: url('b1.jpg');
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    #video-container {
+        width: 900px;
+        height: 640px;
+        margin: 130px auto;
+        text-align: center;
+        position: relative;
+
+    }
+
+    video {
+        width: 100%;
+        height: 100%;
+    }
+
+    #video-title {
+        font-size: 20px;
+        color: #fff;
+        margin-bottom: -50px;
+    }
+
+    #button-container {
+        text-align: center;
+        margin-top: -130px;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        
+    }
+
+    .button:hover {
+        background-color: #555;
+    }
+
+    #video-cover {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1; /* Place the cover div below the buttons */
+    }
+
+    #progress-container {
+        width: 100%;
+        background-color: #333;
+        height: 5px;
+        position: absolute;
+        top: calc(100% - 80px); /* Position the progress bar below the video and above the buttons */
+        cursor: pointer;
+    }
+
+    #progress-bar {
+        width: 0;
+        height: 100%;
+        background-color: #78e8ff;
+        position: absolute;
+    }
+
+    #coming-soon {
+        display: none;
+    }
+</style>
+
+</head>
+<body>
+    <div id="video-container">
+        <p id="video-title"></p>
+        <video id="video-player" autoplay>
+            <source src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+        <p id="coming-soon" style="display: none;">Coming Soon</p>
+        <div id="video-cover"></div>
+    </div>
+    <div id="button-container">
+        <button class="button" onclick="playVideo('a1')">1</button>
+        <button class="button" onclick="playVideo('a2')">2</button>
+        <button class="button" onclick="playVideo('a3')">3</button>
+        <button class="button" onclick="playVideo('a4')">4</button>
+        <button class="button" onclick="playVideo('b5')">5</button>
+        <button class="button" onclick="playVideo('b6')">6</button>
+        <button class="button" onclick="playVideo('a7')">7</button>
+        <button class="button" onclick="playVideo('a8')">8</button>
+    </div>
+
+    <script>
+    const videoPlayer = document.getElementById('video-player');
+    const videoCover = document.getElementById('video-cover');
+    const comingSoonMessage = document.getElementById('coming-soon');
+    const videoTitle = document.getElementById('video-title');
+    const progressBar = document.getElementById('progress-bar');
+    const progressContainer = document.getElementById('progress-container');
+
+    function playVideo(videoName) {
+        const videoSources = {
+            'a1': 'a1.mp4',
+            'a2': 'a2.mp4',
+            'a3': 'a3.mp4',
+            'a4': 'a4.mp4',
+            'b5': 'b5.mp4',
+            'b6': 'b6.mp4',
+            'a7': 'a7.mp4',
+            'a8': 'a8.mp4'
+        };
+
+        const videoTitles = {
+            'a1': 'Name of Memories',
+            'a2': 'Memory Swan',
+            'a3': 'The Great Memories',
+            'a4': 'The Beautiful Memories',
+            'b5': 'Fading Memories',
+            'b6': 'Rumbling Memories',
+            'a7': 'Rebirth of Memories',
+            'a8': 'Coming Soon'
+        };
+
+        if (videoSources.hasOwnProperty(videoName)) {
+            videoPlayer.src = videoSources[videoName];
+            comingSoonMessage.style.display = 'none';
+            videoTitle.textContent = videoTitles[videoName];
+            progressBar.style.width = '0';
+        } else {
+            videoPlayer.style.display = 'none';
+            comingSoonMessage.style.display = 'block';
+            videoTitle.textContent = '';
+        }
+    }
+
+    window.addEventListener('load', function() {
+        playVideo('a1');
+    });
+
+    videoPlayer.addEventListener('timeupdate', function() {
+        const currentTime = videoPlayer.currentTime;
+        const duration = videoPlayer.duration;
+        const progressBarWidth = (currentTime / duration) * 100 + '%';
+        progressBar.style.width = progressBarWidth;
+    });
+
+    videoCover.addEventListener('click', function() {
+        if (videoPlayer.paused) {
+            videoPlayer.play();
+        } else {
+            videoPlayer.pause();
+        }
+    });
+
+    progressContainer.addEventListener('click', function(event) {
+        const rect = progressContainer.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;
+        const progressBarWidth = (mouseX / rect.width) * 100 + '%';
+        progressBar.style.width = progressBarWidth;
+        const seekTime = (mouseX / rect.width) * videoPlayer.duration;
+        videoPlayer.currentTime = seekTime;
+    });
+    </script>
+
+</body>
+</html>
